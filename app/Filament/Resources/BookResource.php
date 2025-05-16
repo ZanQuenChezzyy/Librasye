@@ -28,9 +28,9 @@ class BookResource extends Resource
                     ->maxLength(100),
                 Forms\Components\TextInput::make('isbn')
                     ->maxLength(13),
-                Forms\Components\TextInput::make('author_id')
-                    ->required()
-                    ->numeric(),
+                Forms\Components\Select::make('author_id')
+                    ->relationship('authors', 'name')
+                    ->required(),
                 Forms\Components\TextInput::make('publisher')
                     ->required()
                     ->maxLength(100),
@@ -45,10 +45,15 @@ class BookResource extends Resource
                 Forms\Components\TextInput::make('language')
                     ->required()
                     ->maxLength(20),
-                Forms\Components\TextInput::make('cover_url')
-                    ->maxLength(255),
+                Forms\Components\FileUpload::make('cover_url')
+                    ->label('Cover Image')
+                    ->image()
+                    ->preserveFilenames()
+                    ->directory('covers')
+                    ->required(),
                 Forms\Components\Textarea::make('description')
-                    ->columnSpanFull(),
+                    ->rows(10)
+                    ->maxLength(500),
                 Forms\Components\TextInput::make('stock')
                     ->required()
                     ->numeric()
@@ -66,8 +71,7 @@ class BookResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('isbn')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('author_id')
-                    ->numeric()
+                Tables\Columns\TextColumn::make('authors.name')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('publisher')
                     ->searchable(),
